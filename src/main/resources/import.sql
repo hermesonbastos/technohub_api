@@ -1,0 +1,47 @@
+-- -- This file allow to write SQL commands that will be emitted in test and dev.
+-- -- The commands are commented as their support depends of the database
+-- -- insert into myentity (id, field) values(1, 'field-1');
+-- -- insert into myentity (id, field) values(2, 'field-2');
+-- -- insert into myentity (id, field) values(3, 'field-3');
+-- -- alter sequence myentity_seq restart with 4;
+--
+-- create table if not exists public.user_tb
+-- (
+--     id       bigint       not null
+--         primary key,
+--     email    varchar(255) not null
+--         unique,
+--     icon     varchar(255),
+--     password varchar(255) not null
+-- );
+--
+-- alter table public.user_tb
+--     owner to postgres;
+--
+-- create table if not exists public.post_tb
+-- (
+--     author_id   bigint       not null
+--         constraint fke9q2p7usljh7hgltmdssagc06
+--             references public.user_tb,
+--     id          bigint       not null
+--         primary key,
+--     category    varchar(50)  not null,
+--     title       varchar(100) not null,
+--     link        varchar(300) not null,
+--     description varchar(500) not null
+-- );
+--
+-- alter table public.post_tb
+--     owner to postgres;
+--
+-- create table if not exists public.user_roles
+-- (
+--     id   bigint not null
+--         constraint fk4wnbmlls44fb9qqy1w8fvb49u
+--             references public.user_tb,
+--     role varchar(255)
+-- );
+--
+-- alter table public.user_roles
+--     owner to postgres;
+--
