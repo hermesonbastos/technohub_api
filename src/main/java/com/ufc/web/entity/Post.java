@@ -3,6 +3,9 @@ package com.ufc.web.entity;
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 
+import java.util.List;
+import java.util.Optional;
+
 @Entity
 @Table(name = "post_tb")
 public class Post extends PanacheEntity {
@@ -22,5 +25,9 @@ public class Post extends PanacheEntity {
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     public User author;
+
+    public static List<Post> findByAuthor(User author) {
+        return list("author", author);
+    }
 
 }
