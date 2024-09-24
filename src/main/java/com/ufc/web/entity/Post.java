@@ -4,7 +4,6 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @Entity
 @Table(name = "post_tb")
@@ -26,8 +25,31 @@ public class Post extends PanacheEntity {
     @JoinColumn(name = "author_id", nullable = false)
     public User author;
 
+    public static Post findById(long id) {
+        return find("id", id).firstResult();
+    }
+
     public static List<Post> findByAuthor(User author) {
         return list("author", author);
     }
 
+    public static boolean deletePostById(long id) {
+        return deleteById(id);
+    }
+
+    public static Post updatePost(Post tempPost) {
+        Post post = (Post) findByIdOptional(tempPost.id).orElse(null);
+        if (post != null) {
+            post.title = tempPost.title;
+            post.description = tempPost.description;
+            post.link = tempPost.link;
+            post.category = tempPost.category;
+            post.persist();
+        }
+        return post;
+    }
+
+    public static List<Post> findByCategory(String category) {
+        return list("category", category);
+    }
 }

@@ -18,4 +18,11 @@ public class PostService {
         post.persist();
     }
 
+    public Post updatePost(Post post) {
+        return Post.updatePost(post);
+    }
+
+    public boolean deletePost(Post post) {
+        return Post.deletePostById(post.id);
+    }
 }

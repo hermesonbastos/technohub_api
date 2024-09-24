@@ -2,6 +2,7 @@ package com.ufc.web.resource;
 
 import com.ufc.web.dto.PostDTO;
 import com.ufc.web.entity.Post;
+import com.ufc.web.entity.User;
 import com.ufc.web.service.PostService;
 import com.ufc.web.service.UserService;
 import jakarta.annotation.security.RolesAllowed;
@@ -29,9 +30,32 @@ public class PostResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response listAllPosts() {
         List<PostDTO> postDTOList = postService.findAll().stream()
-                .map(post -> new PostDTO(post.title, post.description, post.link, post.category, post.author))
+                .map(post -> new PostDTO(post.id, post.title, post.description, post.link, post.category, post.author))
                 .toList();
-        return Response.ok(postDTOList).build();
+        return Response.status(Response.Status.OK).entity(postDTOList).build();
+    }
+
+    @GET
+    @Path("/user")
+    @RolesAllowed({"manager","customer"})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPostsByUser(@QueryParam("email") String email) {
+        var user = User.findByEmail(email);
+        if (user.isEmpty()) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+
+        List<Post> posts = Post.findByAuthor(user.get());
+        return Response.status(Response.Status.OK).entity(posts).build();
+    }
+
+    @GET
+    @Path("/category")
+    @RolesAllowed({"manager", "customer"})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPostByCategory(@QueryParam("category") String category) {
+        List<Post> posts = Post.findByCategory(category);
+        return Response.status(Response.Status.OK).entity(posts).build();
     }
 
     @POST
@@ -41,8 +65,33 @@ public class PostResource {
         Post newPost = postDTO.toPost();
         newPost.author = userService.getCurrentUser();
         postService.createPost(newPost);
-        PostDTO newPostDTO = new PostDTO(newPost.title, newPost.description, newPost.link, newPost.category, newPost.author);
+        PostDTO newPostDTO = new PostDTO(newPost.id, newPost.title, newPost.description, newPost.link, newPost.category, newPost.author);
         return Response.status(Response.Status.CREATED).entity(newPostDTO).build();
+    }
+
+    @PUT
+    @RolesAllowed({"manager", "customer"})
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updatePost(PostDTO postDTO) {
+        Post post = postService.updatePost(postDTO.toPost());
+        return post != null ?
+                Response.status(Response.Status.OK).entity(post).build() :
+                Response.status(Response.Status.BAD_REQUEST).build();
+    }
+
+    @DELETE
+    @RolesAllowed({"manager", "customer"})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deletePost(@QueryParam("id") Long id) {
+        Post post = Post.findById(id);
+        if (post == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        boolean deleted = postService.deletePost(post);
+        return deleted ?
+                Response.status(Response.Status.OK).build() :
+                Response.status(Response.Status.NOT_FOUND).build();
     }
 
 
