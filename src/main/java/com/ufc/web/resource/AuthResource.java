@@ -5,7 +5,10 @@ import com.ufc.web.dto.TokenDTO;
 import com.ufc.web.service.AuthService;
 import jakarta.annotation.security.PermitAll;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.*;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
@@ -20,6 +23,18 @@ public class AuthResource {
     }
 
     @POST
+    @Path("/validate")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response validate(TokenDTO tokenDTO) {
+        boolean isValid = authService.validate(tokenDTO);
+
+        return isValid ?
+                Response.status(Response.Status.OK).entity("Token válido").build() :
+                Response.status(Response.Status.UNAUTHORIZED).entity("Token inválido").build();
+    }
+
+    @POST
     @PermitAll
     @Path("/login")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -29,11 +44,9 @@ public class AuthResource {
             String token = authService.authenticate(request);
             TokenDTO tokenResponse = new TokenDTO(token);
 
-            return Response.status(Response.Status.CREATED)
-                    .entity(tokenResponse).build();
+            return Response.status(Response.Status.CREATED).entity(tokenResponse).build();
         } catch (SecurityException e) {
-            return Response.status(Response.Status.UNAUTHORIZED)
-                    .entity("Credenciais inválidas").build();
+            return Response.status(Response.Status.UNAUTHORIZED).entity("Credenciais inválidas").build();
         }
     }
 
