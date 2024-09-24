@@ -15,14 +15,16 @@ public class PostService {
 
     @Transactional
     public void createPost(Post post) {
-        post.persist();
+        Post.persist(post);
     }
 
     public Post updatePost(Post post) {
         return Post.updatePost(post);
     }
 
+    @Transactional
     public boolean deletePost(Post post) {
         return Post.deletePostById(post.id);
     }
+
 }

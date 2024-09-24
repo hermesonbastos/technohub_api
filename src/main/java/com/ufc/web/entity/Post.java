@@ -4,6 +4,7 @@ import io.quarkus.hibernate.orm.panache.PanacheEntity;
 import jakarta.persistence.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "post_tb")
@@ -24,10 +25,6 @@ public class Post extends PanacheEntity {
     @ManyToOne
     @JoinColumn(name = "author_id", nullable = false)
     public User author;
-
-    public static Post findById(long id) {
-        return find("id", id).firstResult();
-    }
 
     public static List<Post> findByAuthor(User author) {
         return list("author", author);
@@ -52,4 +49,5 @@ public class Post extends PanacheEntity {
     public static List<Post> findByCategory(String category) {
         return list("category", category);
     }
+
 }

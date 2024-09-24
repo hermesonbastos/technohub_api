@@ -45,6 +45,7 @@ public class User extends PanacheEntity {
         this.password = password;
     }
 
+
     public static Optional<User> findByEmail(String email) {
         return User.find("email", email).firstResultOptional();
     }
