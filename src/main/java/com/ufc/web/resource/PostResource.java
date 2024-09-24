@@ -31,7 +31,7 @@ public class PostResource {
         List<PostDTO> postDTOList = postService.findAll().stream()
                 .map(post -> new PostDTO(post.title, post.description, post.link, post.category, post.author))
                 .toList();
-        return Response.ok(postDTOList).build();
+        return Response.status(Response.Status.CREATED).entity(postDTOList).build();
     }
 
     @POST
