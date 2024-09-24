@@ -27,7 +27,7 @@ public class AuthResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response validate(TokenDTO tokenDTO) {
-        boolean isValid = authService.validadate(tokenDTO);
+        boolean isValid = authService.validate(tokenDTO);
 
         return isValid ?
                 Response.status(Response.Status.OK).entity("Token válido").build() :

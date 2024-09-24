@@ -30,7 +30,7 @@ public class AuthService {
         this.userService = userService;
     }
 
-    public boolean validadate(TokenDTO tokenDTO) {
+    public boolean validate(TokenDTO tokenDTO) {
         try {
             JsonWebToken jwt = parser.parse(tokenDTO.token());
 
