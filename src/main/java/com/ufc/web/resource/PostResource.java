@@ -40,13 +40,13 @@ public class PostResource {
     @Path("/user")
     @RolesAllowed({"manager","customer"})
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getPostsByUser(@QueryParam("email") String email) {
-       var user = User.findByEmail(email);
+    public Response getPostsByUser(@QueryParam("id") long id) {
+       var user = User.findByIdOptional(id);
        if (user.isEmpty()) {
            return Response.status(Response.Status.NOT_FOUND).build();
        }
 
-       List<Post> posts = Post.findByAuthor(user.get());
+       List<Post> posts = Post.findByAuthor((User) user.get());
        return Response.status(Response.Status.OK).entity(posts).build();
     }
 
