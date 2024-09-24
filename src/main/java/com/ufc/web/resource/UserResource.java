@@ -27,9 +27,9 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response listAllUsers() {
         List<UserDTO> userDTOList = userService.findAll().stream()
-                .map(user -> new UserDTO(user.email, null, user.icon, user.roles))
+                .map(user -> new UserDTO(user.name, user.email, null, user.icon, user.roles))
                 .toList();
-        return Response.ok(userDTOList).build();
+        return Response.status(Response.Status.OK).entity(userDTOList).build();
     }
 
     @GET
@@ -38,8 +38,8 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUser() {
         User user = userService.getCurrentUser();
-        UserDTO currentUserDTO = new UserDTO(user.email, null, user.icon, user.roles);
-        return Response.ok(currentUserDTO).build();
+        UserDTO currentUserDTO = new UserDTO(user.name, user.email, null, user.icon, user.roles);
+        return Response.status(Response.Status.OK).entity(currentUserDTO).build();
     }
 
     @POST
@@ -47,7 +47,7 @@ public class UserResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createUser(UserDTO userDTO) {
         User newUser = userService.createUser(userDTO.toUser());
-        UserDTO newUserDTO = new UserDTO(newUser.email, newUser.getPassword(), newUser.icon, newUser.roles);
+        UserDTO newUserDTO = new UserDTO(newUser.name, newUser.email, null, newUser.icon, newUser.roles);
         return Response.status(Response.Status.CREATED).entity(newUserDTO).build();
     }
 }

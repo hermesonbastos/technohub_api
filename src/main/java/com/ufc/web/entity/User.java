@@ -12,6 +12,9 @@ import java.util.Optional;
 @JsonIgnoreProperties({"password", "roles", "posts"})
 public class User extends PanacheEntity {
 
+    @Column(nullable = false)
+    public String name;
+
     @Column(unique = true, nullable = false)
     public String email;
 
@@ -41,6 +44,7 @@ public class User extends PanacheEntity {
     public void setPassword(String password) {
         this.password = password;
     }
+
 
     public static Optional<User> findByEmail(String email) {
         return User.find("email", email).firstResultOptional();

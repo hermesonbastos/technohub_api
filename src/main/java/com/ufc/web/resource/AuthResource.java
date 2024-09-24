@@ -28,10 +28,13 @@ public class AuthResource {
         try {
             String token = authService.authenticate(request);
             TokenDTO tokenResponse = new TokenDTO(token);
-            return Response.ok(tokenResponse).build();
+
+            return Response.status(Response.Status.CREATED)
+                    .entity(tokenResponse).build();
         } catch (SecurityException e) {
             return Response.status(Response.Status.UNAUTHORIZED)
                     .entity("Credenciais inválidas").build();
         }
     }
+
 }
