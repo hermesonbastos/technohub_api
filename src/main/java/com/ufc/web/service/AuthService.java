@@ -47,15 +47,17 @@ public class AuthService {
     }
 
     public String authenticate(AuthDTO authDTO) {
-        User user = userService.findByEmail(authDTO.email());
-        if (user == null || !UserService.matchPassword(user, authDTO.password())) {
-            throw new AuthenticationFailedException("Credenciais incorretas");
-        }
-
-        return Jwt.issuer(issuer)
-                .upn(user.email)
-                .groups(new HashSet<>(user.roles))
-                .expiresIn(Duration.ofMinutes(25L))
-                .sign();
+    User user = userService.findByEmail(authDTO.email());
+    if (user == null || !UserService.matchPassword(user, authDTO.password())) {
+        throw new AuthenticationFailedException("Credenciais incorretas");
     }
+
+    return Jwt.issuer(issuer)
+            .upn(user.email)
+            .groups(new HashSet<>(user.roles))
+            .claim("user_id", user.id)
+            .expiresIn(Duration.ofDays(1))
+            .sign();
+    }
+
 }

@@ -18,8 +18,20 @@ public class PostService {
         Post.persist(post);
     }
 
+    @Transactional
     public Post updatePost(Post post) {
-        return Post.updatePost(post);
+        Post existingPost = Post.findById(post.id);
+        if (existingPost == null) {
+            return null;
+        }
+        
+        existingPost.title = post.title;
+        existingPost.description = post.description;
+        existingPost.link = post.link;
+        existingPost.category = post.category;
+
+        existingPost.persist();
+        return existingPost;
     }
 
     @Transactional

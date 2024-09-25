@@ -27,7 +27,6 @@ public class PostResource {
     }
 
     @GET
-    @RolesAllowed({"manager", "customer"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response listAllPosts() {
         List<PostResponseDTO> postDTOList = postService.findAll().stream()
@@ -38,7 +37,6 @@ public class PostResource {
 
     @GET
     @Path("/user")
-    @RolesAllowed({"manager","customer"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPostsByUser(@QueryParam("id") long id) {
        var user = User.findByIdOptional(id);
@@ -52,7 +50,6 @@ public class PostResource {
 
     @GET
     @Path("/category")
-    @RolesAllowed({"manager", "customer"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response getPostByCategory(@QueryParam("category") String category) {
         List<Post> posts = Post.findByCategory(category);
@@ -60,7 +57,6 @@ public class PostResource {
     }
 
     @POST
-    @RolesAllowed({"manager", "customer"})
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createPost(PostRequestDTO postDTO) {
         Post newPost = postDTO.toPost();
@@ -71,7 +67,6 @@ public class PostResource {
     }
 
     @PUT
-    @RolesAllowed({"manager", "customer"})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response updatePost(@QueryParam("id") long id, PostRequestDTO postDTO) {
@@ -85,7 +80,6 @@ public class PostResource {
     }
 
     @DELETE
-    @RolesAllowed({"manager", "customer"})
     @Produces(MediaType.APPLICATION_JSON)
     public Response deletePost(@QueryParam("id") Long id) {
         Post post = Post.findById(id);
