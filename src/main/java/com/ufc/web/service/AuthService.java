@@ -47,7 +47,7 @@ public class AuthService {
     }
 
     public String authenticate(AuthDTO authDTO) {
-        User user = userService.findByEmail(authDTO.username());
+        User user = userService.findByEmail(authDTO.email());
         if (user == null || !UserService.matchPassword(user, authDTO.password())) {
             throw new AuthenticationFailedException("Credenciais incorretas");
         }
