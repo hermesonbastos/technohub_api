@@ -1,11 +1,10 @@
 package com.ufc.web.dto;
 
 import com.ufc.web.entity.Post;
-import com.ufc.web.entity.User;
 
 import java.io.Serializable;
 
-public record PostRequestDTO(String title, String description, String link, String category, User author) implements Serializable {
+public record PostRequestDTO(String title, String description, String link, String category) implements Serializable {
 
     public Post toPost() {
         Post post = new Post();
